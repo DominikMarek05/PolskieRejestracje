@@ -23,10 +23,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="Wynik: "
+        android:text="Wynik: 0"
         android:textSize="50sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"/>
+    <ImageView
+        android:id="@+id/serce1"
+        android:layout_width="25sp"
+        android:layout_height="25sp"
+        android:src="@drawable/heart"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="65dp"/>
+    <ImageView
+        android:id="@+id/serce2"
+        android:layout_width="25sp"
+        android:layout_height="25sp"
+        android:src="@drawable/heart"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="35dp"/>
+    <ImageView
+        android:id="@+id/serce3"
+        android:layout_width="25sp"
+        android:layout_height="25sp"
+        android:src="@drawable/heart"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="5dp"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -38,7 +62,7 @@
         android:id="@+id/rejestracja"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="RTA"
+        android:text="RMI"
         android:textSize="68sp"
         android:layout_marginTop="120dp"
         android:layout_marginStart="40dp"
