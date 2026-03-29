@@ -1,6 +1,5 @@
 package com.example.polskierejestracje;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +9,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.polskierejestracje.Classes.ImplementArray;
+import com.example.polskierejestracje.Classes.Rejestracja;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     Button pierwszaOdpowiedz;
@@ -26,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
     TextView rejestracja;
     TextView wynik;
     int wynikInt = 0;
-    HashMap<String, String> wojewodztwoRzeszowskie = new HashMap<>();
-    HashMap<String, String> wszystkiePowiaty = new HashMap<>();
-    HashMap<String, String> wojewodztwoRzeszowskieWybierz = new HashMap<>();
-    Random random = new Random();
+    ArrayList<Rejestracja> wojewodztwoRzeszowskie = new ArrayList<>();
+    ArrayList<Rejestracja> wszystkiePowiaty = new ArrayList<>();
+    Rejestracja poprawnaRejestracja = new Rejestracja();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,60 +41,52 @@ public class MainActivity extends AppCompatActivity {
         powrot = findViewById(R.id.powrot);
         rejestracja = findViewById(R.id.rejestracja);
         wynik = findViewById(R.id.wynik);
-        ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskieWybierz);
+        ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskie);
 
         kolekcjaPrzyciskow.add(pierwszaOdpowiedz);
         kolekcjaPrzyciskow.add(drugaOdpowiedz);
         kolekcjaPrzyciskow.add(trzeciaOdpowiedz);
         kolekcjaPrzyciskow.add(czwartaOdpowiedz);
 
+        ImplementArray.stworzWszystkieWojewodztwa(wszystkiePowiaty); // Stworzenie puli rejestracji
+        ustawNowaRejestracje(); // Zaimplementowanie poprawnej rejestracji
 
-        ImplementArray.stworzWszystkieWojewodztwa(wszystkiePowiaty);
-        ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskie);
-
-        ustawRejestracje();
-        ustawOdpowiedzi();
+        ustawOdpowiedzi(); // Ustawienie nowych odpowiedzi do przycisków
 
         
-        pierwszaOdpowiedz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
-                    if (pierwszaOdpowiedz.getText() == nazwaSkrotu){
-                        wynikInt++;
-                        wynik.setText("Wynik: " + wynikInt);
-                        ustawRejestracje();
-                        ustawOdpowiedzi();
-                    }
+        pierwszaOdpowiedz.setOnClickListener(v -> {
+            //String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
+                if (pierwszaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
+                    wynikInt++;
+                    wynik.setText("Wynik: " + wynikInt);
+                    ustawNowaRejestracje();
+                    ustawOdpowiedzi();
                 }
-        });
+            });
 
         drugaOdpowiedz.setOnClickListener(v -> {
-            String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
-            if (drugaOdpowiedz.getText() == nazwaSkrotu){
+            if (drugaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
                 wynik.setText("Wynik: " + wynikInt);
-                ustawRejestracje();
+                ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }
         });
 
         trzeciaOdpowiedz.setOnClickListener(v -> {
-            String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
-            if (trzeciaOdpowiedz.getText() == nazwaSkrotu){
+            if (trzeciaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
                 wynik.setText("Wynik: " + wynikInt);
-                ustawRejestracje();
+                ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }
         });
 
         czwartaOdpowiedz.setOnClickListener(v -> {
-            String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
-            if (czwartaOdpowiedz.getText() == nazwaSkrotu){
+            if (czwartaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
                 wynik.setText("Wynik: " + wynikInt);
-                ustawRejestracje();
+                ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }
         });
@@ -108,28 +98,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void podstawPoprawnaOdpowiedz(){
-        kolekcjaPrzyciskow.get(random.nextInt(kolekcjaPrzyciskow.size())).setText(wszystkiePowiaty.get(rejestracja.getText().toString()));
-    }
     public void ustawOdpowiedzi(){
         ustawOdpowiedzWojewodztw(pierwszaOdpowiedz);
         ustawOdpowiedzWojewodztw(drugaOdpowiedz);
         ustawOdpowiedzWojewodztw(trzeciaOdpowiedz);
         ustawOdpowiedzWojewodztw(czwartaOdpowiedz);
-        podstawPoprawnaOdpowiedz();
+        kolekcjaPrzyciskow.get((int)(Math.random()*4)).setText(poprawnaRejestracja.getNazwa());
     }
-
-    public void ustawRejestracje(){
-
-        String[] wartosci = wszystkiePowiaty.keySet().toArray(new String[0]);
-        rejestracja.setText(wartosci[random.nextInt(wartosci.length)]);
+    public void ustawNowaRejestracje(){
+        poprawnaRejestracja = wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size()));
+        rejestracja.setText(poprawnaRejestracja.getSkrot());
     }
 
     public void ustawOdpowiedzWojewodztw(Button b){
-        String[] wartosci = wszystkiePowiaty.values().toArray(new String[0]);
-        String losowaWartosc = wartosci[random.nextInt(wartosci.length)];
-        b.setText(losowaWartosc);
+        b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
     }
 
 }
