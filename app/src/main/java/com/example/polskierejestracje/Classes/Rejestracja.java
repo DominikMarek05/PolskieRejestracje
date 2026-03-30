@@ -11,9 +11,14 @@ public class Rejestracja {
     public String getSkrot(){
         return skrot;
     }
-
+    public void setSkrot(String skrot){
+        this.skrot = skrot;
+    }
     public String getNazwa(){
         return nazwa;
+    }
+    public void setNazwa(String nazwa){
+        this.nazwa = nazwa;
     }
     public Rejestracja(char litera, String skrot, String nazwa){
         this.literaWojewodztwa = litera;

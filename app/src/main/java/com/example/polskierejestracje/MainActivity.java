@@ -3,7 +3,6 @@ package com.example.polskierejestracje;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView serce3;
     int wynikInt;
     int bledneOdpowiedzi;
-    ArrayList<Rejestracja> wojewodztwoRzeszowskie = new ArrayList<>();
     ArrayList<Rejestracja> wszystkiePowiaty = new ArrayList<>();
     Rejestracja poprawnaRejestracja = new Rejestracja();
+    SharedPreferences sp;
 
 
     @Override
@@ -52,28 +51,27 @@ public class MainActivity extends AppCompatActivity {
         serce1 = findViewById(R.id.serce1);
         serce2 = findViewById(R.id.serce2);
         serce3 = findViewById(R.id.serce3);
-        ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskie);
+        //ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskie);
 
         kolekcjaPrzyciskow.add(pierwszaOdpowiedz);
         kolekcjaPrzyciskow.add(drugaOdpowiedz);
         kolekcjaPrzyciskow.add(trzeciaOdpowiedz);
         kolekcjaPrzyciskow.add(czwartaOdpowiedz);
 
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
-        wynikInt = sp.getInt("wynik", 0);
+        sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
-
+        wynikInt = sp.getInt("wynik", 0);
         ImplementArray.stworzWszystkieWojewodztwa(wszystkiePowiaty); // Stworzenie puli rejestracji
-        ustawNowaRejestracje(); // Zaimplementowanie poprawnej rejestracji
-
-        ustawOdpowiedzi(); // Ustawienie nowych odpowiedzi do przycisków
-
-        // Początkowe ustawianie serc
-        if(bledneOdpowiedzi!=0){
+        // Wczytaj wartości po powrocie
+        if(bledneOdpowiedzi!=0 || wynikInt!=0){
             ustawSerce(bledneOdpowiedzi);
+            wczytajPoPauzie();
+        }else{
+            ustawNowaRejestracje(); // Zaimplementowanie poprawnej rejestracji
+            ustawOdpowiedzi(); // Ustawienie nowych odpowiedzi do przycisków
         }
-        pierwszaOdpowiedz.setOnClickListener(v -> {
-            //String nazwaSkrotu = wszystkiePowiaty.get(rejestracja.getText().toString());
+
+        pierwszaOdpowiedz.setOnClickListener(v -> { // ustawienie pierwszego przycisku
                 if (pierwszaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                     wynikInt++;
                     wynik.setText("Wynik: " + wynikInt);
@@ -82,13 +80,12 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     ustawSerce(++bledneOdpowiedzi);
                     if(bledneOdpowiedzi==3){
-                        wynikInt=0;
-                        bledneOdpowiedzi=0;
+                        wyswietlKoniecGry();
                     }
                 }
             });
 
-        drugaOdpowiedz.setOnClickListener(v -> {
+        drugaOdpowiedz.setOnClickListener(v -> { // ustawienie drugiego przycisku
             if (drugaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
                 wynik.setText("Wynik: " + wynikInt);
@@ -97,8 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 ustawSerce(++bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
-                    wynikInt=0;
-                    bledneOdpowiedzi=0;
+                    wyswietlKoniecGry();
                 }
             }
         });
@@ -112,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 ustawSerce(++bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
-                    wynikInt=0;
-                    bledneOdpowiedzi=0;
+                    wyswietlKoniecGry();
                 }
             }
         });
@@ -127,22 +122,12 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 ustawSerce(++bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
-                    wynikInt=0;
-                    bledneOdpowiedzi=0;
+                    wyswietlKoniecGry();
                 }
             }
         });
 
-        powrot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor edytor = sp.edit();
-                edytor.putInt("wynik", wynikInt);
-                edytor.putInt("bledneOdpowiedzi", bledneOdpowiedzi);
-                edytor.apply();
-                finish();
-            }
-        });
+        powrot.setOnClickListener(view -> zapiszPrzyPauzie());
     }
 
     @Override
@@ -165,6 +150,42 @@ public class MainActivity extends AppCompatActivity {
     public void ustawOdpowiedzWojewodztw(Button b){
         b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
     }
+    public void zapiszPrzyPauzie(){
+        sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edytor = sp.edit();
+        edytor.putInt("wynik", wynikInt);
+        edytor.putInt("bledneOdpowiedzi", bledneOdpowiedzi);
+        edytor.putString("pierwszaOdpowiedz", pierwszaOdpowiedz.getText().toString());
+        edytor.putString("drugaOdpowiedz", drugaOdpowiedz.getText().toString());
+        edytor.putString("trzeciaOdpowiedz", trzeciaOdpowiedz.getText().toString());
+        edytor.putString("czwartaOdpowiedz", czwartaOdpowiedz.getText().toString());
+        edytor.putString("skrot", poprawnaRejestracja.getSkrot());
+        edytor.putString("poprawnaOdpowiedz", poprawnaRejestracja.getNazwa());
+        edytor.apply();
+        finish();
+    }
+    public void wczytajPoPauzie(){
+        sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
+        wynikInt = sp.getInt("wynik", 0);
+        wynik.setText("Wynik: " + wynikInt);
+        bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
+        pierwszaOdpowiedz.setText(sp.getString("pierwszaOdpowiedz", ""));
+        drugaOdpowiedz.setText(sp.getString("drugaOdpowiedz", ""));
+        trzeciaOdpowiedz.setText(sp.getString("trzeciaOdpowiedz", ""));
+        czwartaOdpowiedz.setText(sp.getString("czwartaOdpowiedz", ""));
+        rejestracja.setText(sp.getString("skrot", ""));
+
+        poprawnaRejestracja.setNazwa(sp.getString("poprawnaOdpowiedz", ""));
+        poprawnaRejestracja.setSkrot(sp.getString("skrot",""));
+    }
+    public void wyswietlKoniecGry(){
+        sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
+        SharedPreferences.Editor edytor = sp.edit();
+        edytor.putInt("wynik", 0);
+        edytor.putInt("bledneOdpowiedzi", 0);
+        edytor.apply();
+        finish();
+    }
     public void ustawSerce(int numer){
         switch(numer){
             case 3: {
@@ -178,4 +199,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
