@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -13,9 +12,9 @@
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="II"
+        android:text="@string/pauza"
         android:textColor="@color/black"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="30dp"
         android:background="@android:color/transparent"
         />
@@ -34,7 +33,7 @@
         android:layout_width="25sp"
         android:layout_height="25sp"
         android:src="@drawable/heart"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="65dp"/>
     <ImageView
@@ -42,7 +41,7 @@
         android:layout_width="25sp"
         android:layout_height="25sp"
         android:src="@drawable/heart"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="35dp"/>
     <ImageView
@@ -50,7 +49,7 @@
         android:layout_width="25sp"
         android:layout_height="25sp"
         android:src="@drawable/heart"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="5dp"/>
 
@@ -83,7 +82,27 @@
         android:letterSpacing="0.1"
         android:fontFamily="@font/din1451alt"
         android:textColor="@color/black"/>
-
+    <TextView
+        android:id="@+id/napisPrzegranej"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="60sp"
+        android:fontFamily="@font/din1451alt"
+        android:text="PRZEGRAŁEŚ!"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"/>
+    <Button
+        android:id="@+id/powrotDoMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WRÓĆ DO MENU"
+        android:padding="20dp"
+        android:layout_alignTop="@id/napisPrzegranej"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:visibility="invisible"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

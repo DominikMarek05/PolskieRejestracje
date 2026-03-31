@@ -3,11 +3,13 @@ package com.example.polskierejestracje;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.polskierejestracje.Classes.ImplementArray;
@@ -21,10 +23,11 @@ public class MainActivity extends AppCompatActivity {
     Button trzeciaOdpowiedz;
     Button czwartaOdpowiedz;
     Button powrot;
-
+    Button powrotDoMenu;
     ArrayList<Button> kolekcjaPrzyciskow = new ArrayList<>();
     TextView rejestracja;
     TextView wynik;
+    TextView napisPrzegranej;
     ImageView serce1;
     ImageView serce2;
     ImageView serce3;
@@ -41,17 +44,19 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        // Pobranie wszystkich obiektów z .xml
         pierwszaOdpowiedz = findViewById(R.id.pierwszaOdpowiedz);
         drugaOdpowiedz = findViewById(R.id.drugaOdpowiedz);
         trzeciaOdpowiedz = findViewById(R.id.trzeciaOdpowiedz);
         czwartaOdpowiedz = findViewById(R.id.czwartaOdpowiedz);
         powrot = findViewById(R.id.powrot);
+        powrotDoMenu = findViewById(R.id.powrotDoMenu);
         rejestracja = findViewById(R.id.rejestracja);
         wynik = findViewById(R.id.wynik);
+        napisPrzegranej = findViewById(R.id.napisPrzegranej);
         serce1 = findViewById(R.id.serce1);
         serce2 = findViewById(R.id.serce2);
         serce3 = findViewById(R.id.serce3);
-        //ImplementArray.stworzPodkarpackie(wojewodztwoRzeszowskie);
 
         kolekcjaPrzyciskow.add(pierwszaOdpowiedz);
         kolekcjaPrzyciskow.add(drugaOdpowiedz);
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
         wynikInt = sp.getInt("wynik", 0);
         ImplementArray.stworzWszystkieWojewodztwa(wszystkiePowiaty); // Stworzenie puli rejestracji
+
         // Wczytaj wartości po powrocie
         if(bledneOdpowiedzi!=0 || wynikInt!=0){
             ustawSerce(bledneOdpowiedzi);
@@ -71,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
             ustawOdpowiedzi(); // Ustawienie nowych odpowiedzi do przycisków
         }
 
-        pierwszaOdpowiedz.setOnClickListener(v -> { // ustawienie pierwszego przycisku
+        // Ustawienie pierwszego przycisku
+        pierwszaOdpowiedz.setOnClickListener(v -> {
                 if (pierwszaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                     wynikInt++;
                     wynik.setText("Wynik: " + wynikInt);
@@ -85,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        drugaOdpowiedz.setOnClickListener(v -> { // ustawienie drugiego przycisku
+        // Ustawienie drugiego przycisku
+        drugaOdpowiedz.setOnClickListener(v -> {
             if (drugaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
                 wynik.setText("Wynik: " + wynikInt);
@@ -99,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Ustawienie trzeciego przycisku
         trzeciaOdpowiedz.setOnClickListener(v -> {
             if (trzeciaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
@@ -113,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Ustawienie nowego przycisku
         czwartaOdpowiedz.setOnClickListener(v -> {
             if (czwartaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
@@ -127,11 +137,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Obsługa pauzy
         powrot.setOnClickListener(view -> zapiszPrzyPauzie());
-    }
 
-    @Override
-    public void onBackPressed() {
+        // Obsługa powrotu do menu
+        powrotDoMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        // Blokada przycisku systemowego powrotu
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {}
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     public void ustawOdpowiedzi(){
@@ -184,8 +206,15 @@ public class MainActivity extends AppCompatActivity {
         edytor.putInt("wynik", 0);
         edytor.putInt("bledneOdpowiedzi", 0);
         edytor.apply();
-        finish();
+        powrotDoMenu.setVisibility(View.VISIBLE);
+        napisPrzegranej.setVisibility(View.VISIBLE);
+        pierwszaOdpowiedz.setVisibility(View.GONE);
+        drugaOdpowiedz.setVisibility(View.GONE);
+        trzeciaOdpowiedz.setVisibility(View.GONE);
+        czwartaOdpowiedz.setVisibility(View.GONE);
     }
+
+    // Rysowanie serc
     public void ustawSerce(int numer){
         switch(numer){
             case 3: {

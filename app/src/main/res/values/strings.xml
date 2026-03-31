@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PolskieRejestracje</string>
+    <string name="app_name">Polskie Rejestracje</string>
+    <string name="pauza">II</string>
 </resources>
