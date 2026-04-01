@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -85,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     ustawNowaRejestracje();
                     ustawOdpowiedzi();
                 }else{
-                    ustawSerce(++bledneOdpowiedzi);
+                    animacjaSerc(++bledneOdpowiedzi);
+                    ustawSerce(bledneOdpowiedzi);
                     if(bledneOdpowiedzi==3){
                         wyswietlKoniecGry();
                     }
@@ -100,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }else{
-                ustawSerce(++bledneOdpowiedzi);
+                animacjaSerc(++bledneOdpowiedzi);
+                ustawSerce(bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
                     wyswietlKoniecGry();
                 }
@@ -115,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }else{
-                ustawSerce(++bledneOdpowiedzi);
+                animacjaSerc(++bledneOdpowiedzi);
+                ustawSerce(bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
                     wyswietlKoniecGry();
                 }
@@ -130,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 ustawNowaRejestracje();
                 ustawOdpowiedzi();
             }else{
-                ustawSerce(++bledneOdpowiedzi);
+                animacjaSerc(++bledneOdpowiedzi);
+                ustawSerce(bledneOdpowiedzi);
                 if(bledneOdpowiedzi==3){
                     wyswietlKoniecGry();
                 }
@@ -217,15 +223,28 @@ public class MainActivity extends AppCompatActivity {
     // Rysowanie serc
     public void ustawSerce(int numer){
         switch(numer){
-            case 3: {
+            case 3:
                 serce3.setImageResource(R.drawable.emptyheart);
-            }
-            case 2: {
+            case 2:
                 serce2.setImageResource(R.drawable.emptyheart);
-            }
-            case 1:{
+            case 1:
                 serce1.setImageResource(R.drawable.emptyheart);
-            }
+        }
+    }
+
+    // Animacja serc
+    public void animacjaSerc(int numer){
+        Animation drgaj = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.drganie);
+        switch(numer){
+            case 1:
+                serce1.startAnimation(drgaj);
+                break;
+            case 2:
+                serce2.startAnimation(drgaj);
+                break;
+            case 3:
+                serce3.startAnimation(drgaj);
+                break;
         }
     }
 

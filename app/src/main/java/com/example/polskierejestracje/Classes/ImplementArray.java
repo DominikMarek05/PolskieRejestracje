@@ -34,7 +34,7 @@ public class ImplementArray {
         a.add(new Rejestracja('C',"CBR", "brodnicki"));
         a.add(new Rejestracja('C',"CBY", "bydgoski"));
         a.add(new Rejestracja('C',"CCH", "chełmiński"));
-        a.add(new Rejestracja('C',"CGD", "golubsko-dobrzyński"));
+        a.add(new Rejestracja('C',"CGD", "golubsko-\n-dobrzyński"));
         a.add(new Rejestracja('C',"CGR", "grudziądzki"));
         a.add(new Rejestracja('C',"CIN", "inowrocławski"));
         a.add(new Rejestracja('C',"CLI", "lipnowski"));
@@ -101,7 +101,7 @@ public class ImplementArray {
         a.add(new Rejestracja('E', "EPJ", "pajęczański"));
         a.add(new Rejestracja('E', "EPI", "piotrkowski"));
         a.add(new Rejestracja('E', "EPD", "poddębicki"));
-        a.add(new Rejestracja('E', "ERA", "radomszczański"));
+        a.add(new Rejestracja('E', "ERA", "radomszczań-\n-ski"));
         a.add(new Rejestracja('E', "ERW", "rawski"));
         a.add(new Rejestracja('E', "ESI", "sieradzki"));
         a.add(new Rejestracja('E', "ESK", "skierniewicki"));
@@ -118,7 +118,7 @@ public class ImplementArray {
         a.add(new Rejestracja('F', "FKR", "krośnieński"));
         a.add(new Rejestracja('F', "FMI", "międzyrzecki"));
         a.add(new Rejestracja('F', "FNW", "nowosolski"));
-        a.add(new Rejestracja('F', "FSD", "strzelecko-drezdenecki"));
+        a.add(new Rejestracja('F', "FSD", "strzelecko-\n-drezdenecki"));
         a.add(new Rejestracja('F', "FSU", "sulęciński"));
         a.add(new Rejestracja('F', "FSW", "świebodziński"));
         a.add(new Rejestracja('F', "FSL", "słubicki"));
@@ -234,7 +234,7 @@ public class ImplementArray {
 
         a.add(new Rejestracja('O', "OB", "brzeski"));
         a.add(new Rejestracja('O', "OGL", "głubczycki"));
-        a.add(new Rejestracja('O', "OK", "kędzierzyńsko-kozielski"));
+        a.add(new Rejestracja('O', "OK", "kędzierzyńsko-\n-kozielski"));
         a.add(new Rejestracja('O', "OKL", "kluczborski"));
         a.add(new Rejestracja('O', "OKR", "krapkowicki"));
         a.add(new Rejestracja('O', "ONA", "namysłowski"));
@@ -304,7 +304,7 @@ public class ImplementArray {
         a.add(new Rejestracja('R', "RNI", "niżański"));
         a.add(new Rejestracja('R', "RPR", "przemyski"));
         a.add(new Rejestracja('R', "RPZ", "przeworski"));
-        a.add(new Rejestracja('R', "RRS", "ropczycko-sędziszowski"));
+        a.add(new Rejestracja('R', "RRS", "ropczycko-\n-sędziszowski"));
         a.add(new Rejestracja('R', "RZE", "rzeszowski"));
         a.add(new Rejestracja('R', "RSA", "sanocki"));
         a.add(new Rejestracja('R', "RST", "stalowowolski"));
@@ -318,7 +318,7 @@ public class ImplementArray {
         a.add(new Rejestracja('S', "SC", "Częstochowa"));
         a.add(new Rejestracja('S', "SD", "Dąbrowa Górnicza"));
         a.add(new Rejestracja('S', "SG", "Gliwice"));
-        a.add(new Rejestracja('S', "SJZ", "Jastrzębie-Zdrój"));
+        a.add(new Rejestracja('S', "SJZ", "Jastrzębie-\n-Zdrój"));
         a.add(new Rejestracja('S', "SJ", "Jaworzno"));
         a.add(new Rejestracja('S', "SK", "Katowice"));
         a.add(new Rejestracja('S', "SM", "Mysłowice"));
@@ -334,7 +334,7 @@ public class ImplementArray {
 
         a.add(new Rejestracja('S', "SBE", "będziński"));
         a.add(new Rejestracja('S', "SBI", "bielski"));
-        a.add(new Rejestracja('S', "SBL", "bieruńsko-łędziński"));
+        a.add(new Rejestracja('S', "SBL", "bieruńsko-\n-łędziński"));
         a.add(new Rejestracja('S', "SCI", "cieszyński"));
         a.add(new Rejestracja('S', "SCZ", "częstochowski"));
         a.add(new Rejestracja('S', "SGL", "gliwicki"));
