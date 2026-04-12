@@ -2,12 +2,16 @@ package com.example.polskierejestracje;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView serce1;
     ImageView serce2;
     ImageView serce3;
+    RelativeLayout glownyLayout;
     int wynikInt;
     int bledneOdpowiedzi;
     ArrayList<Rejestracja> wszystkiePowiaty = new ArrayList<>();
@@ -59,12 +64,14 @@ public class MainActivity extends AppCompatActivity {
         serce1 = findViewById(R.id.serce1);
         serce2 = findViewById(R.id.serce2);
         serce3 = findViewById(R.id.serce3);
+        glownyLayout = findViewById(R.id.main);
 
         kolekcjaPrzyciskow.add(pierwszaOdpowiedz);
         kolekcjaPrzyciskow.add(drugaOdpowiedz);
         kolekcjaPrzyciskow.add(trzeciaOdpowiedz);
         kolekcjaPrzyciskow.add(czwartaOdpowiedz);
 
+        // Wczytaj wartości z SharedPreferences
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
         wynikInt = sp.getInt("wynik", 0);
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Ustawienie nowego przycisku
+        // Ustawienie czwartego przycisku
         czwartaOdpowiedz.setOnClickListener(v -> {
             if (czwartaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
                 wynikInt++;
@@ -147,12 +154,7 @@ public class MainActivity extends AppCompatActivity {
         powrot.setOnClickListener(view -> zapiszPrzyPauzie());
 
         // Obsługa powrotu do menu
-        powrotDoMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        powrotDoMenu.setOnClickListener(v -> finish());
 
         // Blokada przycisku systemowego powrotu
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -190,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         edytor.putString("skrot", poprawnaRejestracja.getSkrot());
         edytor.putString("poprawnaOdpowiedz", poprawnaRejestracja.getNazwa());
         edytor.apply();
-        finish();
+        wygenerujPolePauzy();
     }
     public void wczytajPoPauzie(){
         sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
@@ -218,6 +220,68 @@ public class MainActivity extends AppCompatActivity {
         drugaOdpowiedz.setVisibility(View.GONE);
         trzeciaOdpowiedz.setVisibility(View.GONE);
         czwartaOdpowiedz.setVisibility(View.GONE);
+    }
+    public void wygenerujPolePauzy(){
+        RelativeLayout.LayoutParams poleWlasciwosci = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams przycisk1Wlasciwosci = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams przycisk2Wlasciwosci = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        ImageView polePauzy = new ImageView(MainActivity.this);
+        Button przyciskDoMenu = new Button(MainActivity.this);
+        Button przyciskDoWznowieniaGry = new Button(MainActivity.this);
+
+        // Pole pauzy
+        poleWlasciwosci.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        poleWlasciwosci.addRule(RelativeLayout.CENTER_VERTICAL);
+
+        polePauzy.setLayoutParams(poleWlasciwosci);
+        polePauzy.setBackgroundColor(Color.argb(0.5f, 0, 0, 0));
+
+        // Przycisk do menu
+        przycisk1Wlasciwosci.topMargin = 1000;
+        przycisk1Wlasciwosci.leftMargin = 400;
+        przycisk1Wlasciwosci.bottomMargin = 100;
+
+        przyciskDoMenu.setLayoutParams(przycisk1Wlasciwosci);
+        przyciskDoMenu.setText("Wyjście");
+        przyciskDoMenu.setTextSize(20.0f);
+        przyciskDoMenu.setTextColor(Color.BLACK);
+        przyciskDoMenu.setPadding(20, 20, 20, 20);
+        przyciskDoMenu.setBackgroundResource(R.drawable.button);
+
+        // Przycisk do wznowienia gry
+        przycisk2Wlasciwosci.topMargin = 1200;
+        przycisk2Wlasciwosci.leftMargin = 345;
+
+        przyciskDoWznowieniaGry.setLayoutParams(przycisk2Wlasciwosci);
+        przyciskDoWznowieniaGry.setText("Wznowienie");
+        przyciskDoWznowieniaGry.setTextSize(20.0f);
+        przyciskDoWznowieniaGry.setTextColor(Color.BLACK);
+        przyciskDoWznowieniaGry.setPadding(20, 20, 20, 20);
+        przyciskDoWznowieniaGry.setBackgroundResource(R.drawable.button);
+
+        glownyLayout.addView(polePauzy);
+        glownyLayout.addView(przyciskDoMenu);
+        glownyLayout.addView(przyciskDoWznowieniaGry);
+
+        powrot.setEnabled(false);
+        pierwszaOdpowiedz.setEnabled(false);
+        drugaOdpowiedz.setEnabled(false);
+        trzeciaOdpowiedz.setEnabled(false);
+        czwartaOdpowiedz.setEnabled(false);
+
+        przyciskDoMenu.setOnClickListener(v -> finish());
+        przyciskDoWznowieniaGry.setOnClickListener(v -> {
+            glownyLayout.removeView(polePauzy);
+            glownyLayout.removeView(przyciskDoMenu);
+            glownyLayout.removeView(przyciskDoWznowieniaGry);
+
+            powrot.setEnabled(true);
+            pierwszaOdpowiedz.setEnabled(true);
+            drugaOdpowiedz.setEnabled(true);
+            trzeciaOdpowiedz.setEnabled(true);
+            czwartaOdpowiedz.setEnabled(true);
+        });
     }
 
     // Rysowanie serc

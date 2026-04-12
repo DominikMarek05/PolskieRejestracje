@@ -252,7 +252,7 @@ public class ImplementArray {
         a.add(new Rejestracja('P', "PY", "Poznań"));
 
         a.add(new Rejestracja('P', "PCH", "chodzieski"));
-        a.add(new Rejestracja('P', "PCT", "czarnkowsko-trzcianecki"));
+        a.add(new Rejestracja('P', "PCT", "czarnkowsko-\n-trzcianecki"));
         a.add(new Rejestracja('P', "PGN", "gnieźnieński"));
         a.add(new Rejestracja('P', "PGS", "gostyński"));
         a.add(new Rejestracja('P', "PGO", "grodziski"));
