@@ -8,7 +8,7 @@
     android:background="@color/white">
 
     <Button
-        android:id="@+id/powrot"
+        android:id="@+id/pauza"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"

@@ -1,5 +1,6 @@
 package com.example.polskierejestracje;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,7 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Button drugaOdpowiedz;
     Button trzeciaOdpowiedz;
     Button czwartaOdpowiedz;
-    Button powrot;
+    Button pauza;
     Button powrotDoMenu;
     ArrayList<Button> kolekcjaPrzyciskow = new ArrayList<>();
     TextView rejestracja;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Rejestracja> wszystkiePowiaty = new ArrayList<>();
     Rejestracja poprawnaRejestracja = new Rejestracja();
     SharedPreferences sp;
-
+    Boolean przelacznik = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         drugaOdpowiedz = findViewById(R.id.drugaOdpowiedz);
         trzeciaOdpowiedz = findViewById(R.id.trzeciaOdpowiedz);
         czwartaOdpowiedz = findViewById(R.id.czwartaOdpowiedz);
-        powrot = findViewById(R.id.powrot);
+        pauza = findViewById(R.id.pauza);
         powrotDoMenu = findViewById(R.id.powrotDoMenu);
         rejestracja = findViewById(R.id.rejestracja);
         wynik = findViewById(R.id.wynik);
@@ -151,10 +151,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Obsługa pauzy
-        powrot.setOnClickListener(view -> zapiszPrzyPauzie());
+        pauza.setOnClickListener(view -> zapiszPrzyPauzie());
 
         // Obsługa powrotu do menu
-        powrotDoMenu.setOnClickListener(v -> finish());
+        powrotDoMenu.setOnClickListener(v -> {
+            pauza.setVisibility(View.VISIBLE);
+            zakonczGre();
+        });
 
         // Blokada przycisku systemowego powrotu
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -220,11 +223,13 @@ public class MainActivity extends AppCompatActivity {
         drugaOdpowiedz.setVisibility(View.GONE);
         trzeciaOdpowiedz.setVisibility(View.GONE);
         czwartaOdpowiedz.setVisibility(View.GONE);
+        pauza.setVisibility(View.GONE);
     }
+    @SuppressLint("ResourceType")
     public void wygenerujPolePauzy(){
         RelativeLayout.LayoutParams poleWlasciwosci = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        LinearLayout.LayoutParams przycisk1Wlasciwosci = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams przycisk2Wlasciwosci = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams przycisk1Wlasciwosci = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams przycisk2Wlasciwosci = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         ImageView polePauzy = new ImageView(MainActivity.this);
         Button przyciskDoMenu = new Button(MainActivity.this);
@@ -237,53 +242,59 @@ public class MainActivity extends AppCompatActivity {
         polePauzy.setLayoutParams(poleWlasciwosci);
         polePauzy.setBackgroundColor(Color.argb(0.5f, 0, 0, 0));
 
-        // Przycisk do menu
-        przycisk1Wlasciwosci.topMargin = 1000;
-        przycisk1Wlasciwosci.leftMargin = 400;
-        przycisk1Wlasciwosci.bottomMargin = 100;
+        // Przycisk do wznowienia gry
+        przycisk1Wlasciwosci.addRule(RelativeLayout.CENTER_IN_PARENT);
+        przycisk1Wlasciwosci.setMargins(50, 20, 50 ,20);
 
-        przyciskDoMenu.setLayoutParams(przycisk1Wlasciwosci);
+        przyciskDoWznowieniaGry.setId(1);
+        przyciskDoWznowieniaGry.setLayoutParams(przycisk1Wlasciwosci);
+        przyciskDoWznowieniaGry.setText("Wznowienie");
+        przyciskDoWznowieniaGry.setTextSize(20.0f);
+        przyciskDoWznowieniaGry.setTextColor(Color.BLACK);
+        przyciskDoWznowieniaGry.setPadding(20, 20, 20, 20);
+        przyciskDoWznowieniaGry.setBackgroundResource(R.drawable.button);
+        // Przycisk do menu
+        przycisk2Wlasciwosci.addRule(RelativeLayout.BELOW, 1);
+        przycisk2Wlasciwosci.setMargins(50, 20, 50 ,20);
+
+        przyciskDoMenu.setLayoutParams(przycisk2Wlasciwosci);
         przyciskDoMenu.setText("Wyjście");
         przyciskDoMenu.setTextSize(20.0f);
         przyciskDoMenu.setTextColor(Color.BLACK);
         przyciskDoMenu.setPadding(20, 20, 20, 20);
         przyciskDoMenu.setBackgroundResource(R.drawable.button);
 
-        // Przycisk do wznowienia gry
-        przycisk2Wlasciwosci.topMargin = 1200;
-        przycisk2Wlasciwosci.leftMargin = 345;
-
-        przyciskDoWznowieniaGry.setLayoutParams(przycisk2Wlasciwosci);
-        przyciskDoWznowieniaGry.setText("Wznowienie");
-        przyciskDoWznowieniaGry.setTextSize(20.0f);
-        przyciskDoWznowieniaGry.setTextColor(Color.BLACK);
-        przyciskDoWznowieniaGry.setPadding(20, 20, 20, 20);
-        przyciskDoWznowieniaGry.setBackgroundResource(R.drawable.button);
-
+        // Dodanie wszystkich wygenerowanych przycisków do głównego layoutu
         glownyLayout.addView(polePauzy);
         glownyLayout.addView(przyciskDoMenu);
         glownyLayout.addView(przyciskDoWznowieniaGry);
 
-        powrot.setEnabled(false);
-        pierwszaOdpowiedz.setEnabled(false);
-        drugaOdpowiedz.setEnabled(false);
-        trzeciaOdpowiedz.setEnabled(false);
-        czwartaOdpowiedz.setEnabled(false);
+        przelaczWidocznoscPrzyciskow();
 
-        przyciskDoMenu.setOnClickListener(v -> finish());
+        przyciskDoMenu.setOnClickListener(v -> {
+            przelaczWidocznoscPrzyciskow();
+            zakonczGre();
+        });
         przyciskDoWznowieniaGry.setOnClickListener(v -> {
             glownyLayout.removeView(polePauzy);
             glownyLayout.removeView(przyciskDoMenu);
             glownyLayout.removeView(przyciskDoWznowieniaGry);
 
-            powrot.setEnabled(true);
-            pierwszaOdpowiedz.setEnabled(true);
-            drugaOdpowiedz.setEnabled(true);
-            trzeciaOdpowiedz.setEnabled(true);
-            czwartaOdpowiedz.setEnabled(true);
+            przelaczWidocznoscPrzyciskow();
         });
     }
-
+    public void przelaczWidocznoscPrzyciskow(){
+        przelacznik=!przelacznik;
+        pauza.setEnabled(przelacznik);
+        pierwszaOdpowiedz.setEnabled(przelacznik);
+        drugaOdpowiedz.setEnabled(przelacznik);
+        trzeciaOdpowiedz.setEnabled(przelacznik);
+        czwartaOdpowiedz.setEnabled(przelacznik);
+    }
+    public void zakonczGre() {
+        finish();
+        overridePendingTransition(0, 0);
+    }
     // Rysowanie serc
     public void ustawSerce(int numer){
         switch(numer){
@@ -295,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
                 serce1.setImageResource(R.drawable.emptyheart);
         }
     }
-
     // Animacja serc
     public void animacjaSerc(int numer){
         Animation drgaj = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.drganie);
