@@ -87,71 +87,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Ustawienie pierwszego przycisku
-        pierwszaOdpowiedz.setOnClickListener(v -> {
-                if (pierwszaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
-                    wynikInt++;
-                    wynik.setText("Wynik: " + wynikInt);
-                    ustawNowaRejestracje();
-                    ustawOdpowiedzi();
-                }else{
-                    animacjaSerc(++bledneOdpowiedzi);
-                    ustawSerce(bledneOdpowiedzi);
-                    if(bledneOdpowiedzi==3){
-                        wyswietlKoniecGry();
-                    }
-                }
-            });
+        pierwszaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(pierwszaOdpowiedz));
 
         // Ustawienie drugiego przycisku
-        drugaOdpowiedz.setOnClickListener(v -> {
-            if (drugaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
-                wynikInt++;
-                wynik.setText("Wynik: " + wynikInt);
-                ustawNowaRejestracje();
-                ustawOdpowiedzi();
-            }else{
-                animacjaSerc(++bledneOdpowiedzi);
-                ustawSerce(bledneOdpowiedzi);
-                if(bledneOdpowiedzi==3){
-                    wyswietlKoniecGry();
-                }
-            }
-        });
+        drugaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(drugaOdpowiedz));
 
         // Ustawienie trzeciego przycisku
-        trzeciaOdpowiedz.setOnClickListener(v -> {
-            if (trzeciaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
-                wynikInt++;
-                wynik.setText("Wynik: " + wynikInt);
-                ustawNowaRejestracje();
-                ustawOdpowiedzi();
-            }else{
-                animacjaSerc(++bledneOdpowiedzi);
-                ustawSerce(bledneOdpowiedzi);
-                if(bledneOdpowiedzi==3){
-                    wyswietlKoniecGry();
-                }
-            }
-        });
+        trzeciaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(trzeciaOdpowiedz));
 
         // Ustawienie czwartego przycisku
-        czwartaOdpowiedz.setOnClickListener(v -> {
-            if (czwartaOdpowiedz.getText().equals(poprawnaRejestracja.getNazwa())){
-                wynikInt++;
-                wynik.setText("Wynik: " + wynikInt);
-                ustawNowaRejestracje();
-                ustawOdpowiedzi();
-            }else{
-                animacjaSerc(++bledneOdpowiedzi);
-                ustawSerce(bledneOdpowiedzi);
-                if(bledneOdpowiedzi==3){
-                    wyswietlKoniecGry();
-                }
-            }
-        });
+        czwartaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(czwartaOdpowiedz));
 
         // Obsługa pauzy
-        pauza.setOnClickListener(view -> zapiszPrzyPauzie());
+        pauza.setOnClickListener(v -> zapiszPrzyPauzie());
 
         // Obsługa powrotu do menu
         powrotDoMenu.setOnClickListener(v -> {
@@ -182,6 +130,41 @@ public class MainActivity extends AppCompatActivity {
 
     public void ustawOdpowiedzWojewodztw(Button b){
         b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
+    }
+    public void obsluzPrzycisk(Button przycisk){
+        if (przycisk.getText().equals(poprawnaRejestracja.getNazwa())){
+            wynikInt++;
+            wynik.setText("Wynik: " + wynikInt);
+            ustawNowaRejestracje();
+            ustawOdpowiedzi();
+            if(!pierwszaOdpowiedz.isActivated()){
+                wlaczKonkretnyPrzycisk(pierwszaOdpowiedz);
+            }
+            if(!drugaOdpowiedz.isActivated()){
+                wlaczKonkretnyPrzycisk(drugaOdpowiedz);
+            }
+            if(!trzeciaOdpowiedz.isActivated()){
+                wlaczKonkretnyPrzycisk(trzeciaOdpowiedz);
+            }
+            if(!czwartaOdpowiedz.isActivated()){
+                wlaczKonkretnyPrzycisk(czwartaOdpowiedz);
+            }
+        }else{
+            animacjaSerc(++bledneOdpowiedzi);
+            ustawSerce(bledneOdpowiedzi);
+            wylaczKonkretnyPrzycisk(przycisk);
+            if(bledneOdpowiedzi==3){
+                wyswietlKoniecGry();
+            }
+        }
+    }
+    public void wylaczKonkretnyPrzycisk(Button przycisk){
+        przycisk.setEnabled(false);
+        przycisk.setAlpha(0.5f);
+    }
+    public void wlaczKonkretnyPrzycisk(Button przycisk){
+        przycisk.setEnabled(true);
+        przycisk.setAlpha(1.0f);
     }
     public void zapiszPrzyPauzie(){
         sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
@@ -240,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
         poleWlasciwosci.addRule(RelativeLayout.CENTER_VERTICAL);
 
         polePauzy.setLayoutParams(poleWlasciwosci);
-        polePauzy.setBackgroundColor(Color.argb(0.5f, 0, 0, 0));
+        polePauzy.setBackgroundColor(Color.BLACK);
+        polePauzy.getBackground().setAlpha(127);
 
         // Przycisk do wznowienia gry
         przycisk1Wlasciwosci.addRule(RelativeLayout.CENTER_IN_PARENT);
