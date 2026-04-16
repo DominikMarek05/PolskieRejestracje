@@ -39,6 +39,10 @@ public class MenuActivity extends AppCompatActivity {
         edytor.putString("drugaOdpowiedz", "");
         edytor.putString("trzeciaOdpowiedz", "");
         edytor.putString("czwartaOdpowiedz", "");
+        edytor.putBoolean("stanPierwszejOdpowiedzi", true);
+        edytor.putBoolean("stanDrugiejOdpowiedzi", true);
+        edytor.putBoolean("stanTrzeciejOdpowiedzi", true);
+        edytor.putBoolean("stanCzwartejOdpowiedzi", true);
         edytor.apply();
     }
 }

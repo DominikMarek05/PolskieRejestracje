@@ -87,23 +87,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Ustawienie pierwszego przycisku
-        pierwszaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(pierwszaOdpowiedz));
+        if(pierwszaOdpowiedz.isClickable()){
+            pierwszaOdpowiedz.setOnClickListener(v -> {
+                obsluzPrzycisk(pierwszaOdpowiedz);
+            });
+        }
 
         // Ustawienie drugiego przycisku
-        drugaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(drugaOdpowiedz));
+        if(drugaOdpowiedz.isClickable()){
+            drugaOdpowiedz.setOnClickListener(v -> {
+                obsluzPrzycisk(drugaOdpowiedz);
+            });
+        }
 
         // Ustawienie trzeciego przycisku
-        trzeciaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(trzeciaOdpowiedz));
+        if(trzeciaOdpowiedz.isClickable()){
+            trzeciaOdpowiedz.setOnClickListener(v -> {
+                obsluzPrzycisk(trzeciaOdpowiedz);
+            });
+        }
 
         // Ustawienie czwartego przycisku
-        czwartaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(czwartaOdpowiedz));
+        if(czwartaOdpowiedz.isClickable()){
+            czwartaOdpowiedz.setOnClickListener(v -> {
+                obsluzPrzycisk(czwartaOdpowiedz);
+            });
+        }
 
         // Obsługa pauzy
         pauza.setOnClickListener(v -> zapiszPrzyPauzie());
 
         // Obsługa powrotu do menu
         powrotDoMenu.setOnClickListener(v -> {
-            pauza.setVisibility(View.VISIBLE);
             zakonczGre();
         });
 
@@ -159,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void wylaczKonkretnyPrzycisk(Button przycisk){
-        przycisk.setEnabled(false);
+        przycisk.setClickable(false);
         przycisk.setAlpha(0.5f);
     }
     public void wlaczKonkretnyPrzycisk(Button przycisk){
-        przycisk.setEnabled(true);
+        przycisk.setClickable(true);
         przycisk.setAlpha(1.0f);
     }
     public void zapiszPrzyPauzie(){
@@ -177,7 +192,16 @@ public class MainActivity extends AppCompatActivity {
         edytor.putString("czwartaOdpowiedz", czwartaOdpowiedz.getText().toString());
         edytor.putString("skrot", poprawnaRejestracja.getSkrot());
         edytor.putString("poprawnaOdpowiedz", poprawnaRejestracja.getNazwa());
+
+        edytor.putBoolean("stanPierwszejOdpowiedzi", pierwszaOdpowiedz.isClickable());
+        edytor.putBoolean("stanDrugiejOdpowiedzi", drugaOdpowiedz.isClickable());
+        edytor.putBoolean("stanTrzeciejOdpowiedzi", trzeciaOdpowiedz.isClickable());
+        edytor.putBoolean("stanCzwartejOdpowiedzi", czwartaOdpowiedz.isClickable());
         edytor.apply();
+        System.out.println(sp.getBoolean("stanPierwszejOdpowiedzi", true));
+        System.out.println(sp.getBoolean("stanDrugiejOdpowiedzi", true));
+        System.out.println(sp.getBoolean("stanTrzeciejOdpowiedzi", true));
+        System.out.println(sp.getBoolean("stanCzwartejOdpowiedzi", true));
         wygenerujPolePauzy();
     }
     public void wczytajPoPauzie(){
@@ -193,6 +217,11 @@ public class MainActivity extends AppCompatActivity {
 
         poprawnaRejestracja.setNazwa(sp.getString("poprawnaOdpowiedz", ""));
         poprawnaRejestracja.setSkrot(sp.getString("skrot",""));
+
+        if(!sp.getBoolean("stanPierwszejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(pierwszaOdpowiedz);
+        if(!sp.getBoolean("stanDrugiejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(drugaOdpowiedz);
+        if(!sp.getBoolean("stanTrzeciejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(trzeciaOdpowiedz);
+        if(!sp.getBoolean("stanCzwartejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(czwartaOdpowiedz);
     }
     public void wyswietlKoniecGry(){
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
@@ -228,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Przycisk do wznowienia gry
         przycisk1Wlasciwosci.addRule(RelativeLayout.CENTER_IN_PARENT);
-        przycisk1Wlasciwosci.setMargins(50, 20, 50 ,20);
+        przycisk1Wlasciwosci.setMargins(80, 20, 80 ,20);
 
         przyciskDoWznowieniaGry.setId(1);
         przyciskDoWznowieniaGry.setLayoutParams(przycisk1Wlasciwosci);
@@ -239,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         przyciskDoWznowieniaGry.setBackgroundResource(R.drawable.button);
         // Przycisk do menu
         przycisk2Wlasciwosci.addRule(RelativeLayout.BELOW, 1);
-        przycisk2Wlasciwosci.setMargins(50, 20, 50 ,20);
+        przycisk2Wlasciwosci.setMargins(80, 20, 80 ,20);
 
         przyciskDoMenu.setLayoutParams(przycisk2Wlasciwosci);
         przyciskDoMenu.setText("Wyjście");
@@ -269,13 +298,14 @@ public class MainActivity extends AppCompatActivity {
     }
     public void przelaczWidocznoscPrzyciskow(){
         przelacznik=!przelacznik;
-        pauza.setEnabled(przelacznik);
-        pierwszaOdpowiedz.setEnabled(przelacznik);
-        drugaOdpowiedz.setEnabled(przelacznik);
-        trzeciaOdpowiedz.setEnabled(przelacznik);
-        czwartaOdpowiedz.setEnabled(przelacznik);
+        pauza.setActivated(przelacznik);
+        pierwszaOdpowiedz.setActivated(przelacznik);
+        drugaOdpowiedz.setActivated(przelacznik);
+        trzeciaOdpowiedz.setActivated(przelacznik);
+        czwartaOdpowiedz.setActivated(przelacznik);
     }
     public void zakonczGre() {
+        przelaczWidocznoscPrzyciskow();
         finish();
         overridePendingTransition(0, 0);
     }
