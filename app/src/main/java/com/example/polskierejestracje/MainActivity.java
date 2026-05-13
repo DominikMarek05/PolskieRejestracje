@@ -1,5 +1,6 @@
 package com.example.polskierejestracje;
 
+import static java.lang.Character.toUpperCase;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import com.example.polskierejestracje.Classes.ImplementArray;
 import com.example.polskierejestracje.Classes.Rejestracja;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity {
     Button pierwszaOdpowiedz;
@@ -135,7 +137,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ustawOdpowiedzWojewodztw(Button b){
-        b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
+        HashSet<Rejestracja> pulaOdpowiedzi = new HashSet<>();
+            for(Rejestracja rej : wszystkiePowiaty){
+               if(konwerterZnakow(rej.getNazwa().charAt(0)) == poprawnaRejestracja.getSkrot().charAt(1) && !rej.getSkrot().equals(poprawnaRejestracja.getSkrot())) {
+                   if(!pierwszaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !drugaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !trzeciaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !czwartaOdpowiedz.getText().toString().equals(rej.getNazwa())) pulaOdpowiedzi.add(rej);
+               }
+            }
+            if(pulaOdpowiedzi.size()>=4) {
+                int losowaWartosc = (int) (Math.random() * pulaOdpowiedzi.size());
+                int i = 0;
+                for (Rejestracja el : pulaOdpowiedzi) {
+                    if (i == losowaWartosc) b.setText(el.getNazwa());
+                    i++;
+                }
+            }else{
+                b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
+            }
     }
     public void obsluzPrzycisk(Button przycisk){
         if (przycisk.getText().equals(poprawnaRejestracja.getNazwa())){
@@ -190,10 +207,6 @@ public class MainActivity extends AppCompatActivity {
         edytor.putBoolean("stanTrzeciejOdpowiedzi", trzeciaOdpowiedz.isClickable());
         edytor.putBoolean("stanCzwartejOdpowiedzi", czwartaOdpowiedz.isClickable());
         edytor.apply();
-        System.out.println(sp.getBoolean("stanPierwszejOdpowiedzi", true));
-        System.out.println(sp.getBoolean("stanDrugiejOdpowiedzi", true));
-        System.out.println(sp.getBoolean("stanTrzeciejOdpowiedzi", true));
-        System.out.println(sp.getBoolean("stanCzwartejOdpowiedzi", true));
         wygenerujPolePauzy();
     }
     public void wczytajPoPauzie(){
@@ -306,6 +319,21 @@ public class MainActivity extends AppCompatActivity {
         przelaczWidocznoscPrzyciskow();
         finish();
         overridePendingTransition(0, 0);
+    }
+
+    public char konwerterZnakow(char c){
+        switch(c){
+            case 'Ł':
+            case 'ł':
+                return 'L';
+            case 'Ś':
+            case 'ś':
+                return 'S';
+            case 'Ż':
+            case 'ż':
+                return 'Z';
+        }
+        return toUpperCase(c);
     }
     // Rysowanie serc
     public void ustawSerce(int numer){

@@ -60,7 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/tablica"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/serduszko"/>
 
     <TextView
         android:id="@+id/rejestracja"
@@ -95,16 +96,16 @@
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:layout_marginTop="250dp"/>
+        android:layout_marginTop="220dp"/>
     <Button
         android:id="@+id/powrotDoMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="WRÓĆ DO MENU"
         android:padding="20dp"
-        android:layout_alignTop="@id/napisPrzegranej"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginBottom="100dp"
         android:visibility="invisible"
         android:textColor="@color/black"
         android:background="@drawable/button"/>
