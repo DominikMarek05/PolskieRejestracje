@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         kolekcjaPrzyciskow.add(trzeciaOdpowiedz);
         kolekcjaPrzyciskow.add(czwartaOdpowiedz);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // Wyłączanie wygaszania w momencie gry
+
         // Wczytaj wartości z SharedPreferences
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
@@ -88,30 +91,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Ustawienie pierwszego przycisku
         if(pierwszaOdpowiedz.isClickable()){
-            pierwszaOdpowiedz.setOnClickListener(v -> {
-                obsluzPrzycisk(pierwszaOdpowiedz);
-            });
+            pierwszaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(pierwszaOdpowiedz));
         }
 
         // Ustawienie drugiego przycisku
         if(drugaOdpowiedz.isClickable()){
-            drugaOdpowiedz.setOnClickListener(v -> {
-                obsluzPrzycisk(drugaOdpowiedz);
-            });
+            drugaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(drugaOdpowiedz));
         }
 
         // Ustawienie trzeciego przycisku
         if(trzeciaOdpowiedz.isClickable()){
-            trzeciaOdpowiedz.setOnClickListener(v -> {
-                obsluzPrzycisk(trzeciaOdpowiedz);
-            });
+            trzeciaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(trzeciaOdpowiedz));
         }
 
         // Ustawienie czwartego przycisku
         if(czwartaOdpowiedz.isClickable()){
-            czwartaOdpowiedz.setOnClickListener(v -> {
-                obsluzPrzycisk(czwartaOdpowiedz);
-            });
+            czwartaOdpowiedz.setOnClickListener(v -> obsluzPrzycisk(czwartaOdpowiedz));
         }
 
         pauza.setOnClickListener(v -> zapiszPrzyPauzie()); // Obsługa pauzy
@@ -178,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         przycisk.setAlpha(1.0f);
     }
     public void zapiszPrzyPauzie(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         sp = getApplicationContext().getSharedPreferences("MojeDane", Context.MODE_PRIVATE);
         SharedPreferences.Editor edytor = sp.edit();
         edytor.putInt("wynik", wynikInt);
@@ -221,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
         if(!sp.getBoolean("stanCzwartejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(czwartaOdpowiedz);
     }
     public void wyswietlKoniecGry(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         SharedPreferences.Editor edytor = sp.edit();
         edytor.putInt("wynik", 0);
@@ -285,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
             zakonczGre();
         });
         przyciskDoWznowieniaGry.setOnClickListener(v -> {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             glownyLayout.removeView(polePauzy);
             glownyLayout.removeView(przyciskDoMenu);
             glownyLayout.removeView(przyciskDoWznowieniaGry);
