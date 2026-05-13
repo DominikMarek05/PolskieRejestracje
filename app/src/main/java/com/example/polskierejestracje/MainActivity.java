@@ -114,13 +114,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // Obsługa pauzy
-        pauza.setOnClickListener(v -> zapiszPrzyPauzie());
+        pauza.setOnClickListener(v -> zapiszPrzyPauzie()); // Obsługa pauzy
 
-        // Obsługa powrotu do menu
-        powrotDoMenu.setOnClickListener(v -> {
-            zakonczGre();
-        });
+        powrotDoMenu.setOnClickListener(v -> zakonczGre()); // Obsługa powrotu do menu
 
         // Blokada przycisku systemowego powrotu
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -165,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 wlaczKonkretnyPrzycisk(czwartaOdpowiedz);
             }
         }else{
-            animacjaSerc(++bledneOdpowiedzi);
-            ustawSerce(bledneOdpowiedzi);
-            wylaczKonkretnyPrzycisk(przycisk);
+            animacjaSerc(++bledneOdpowiedzi); // Inkrementacja błędnej odpowiedzi i nadanie animacji sercu
+            ustawSerce(bledneOdpowiedzi); // Wczytanie odpowiedniej grafiki serduszka
+            wylaczKonkretnyPrzycisk(przycisk); // Odrzucenie przycisku w którym już wiemy, że jest błędna odpowiedź
             if(bledneOdpowiedzi==3){
                 wyswietlKoniecGry();
             }
@@ -218,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         poprawnaRejestracja.setNazwa(sp.getString("poprawnaOdpowiedz", ""));
         poprawnaRejestracja.setSkrot(sp.getString("skrot",""));
 
+        // Wczytanie niepoprawnych odpowiedzi po powrocie z menu
         if(!sp.getBoolean("stanPierwszejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(pierwszaOdpowiedz);
         if(!sp.getBoolean("stanDrugiejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(drugaOdpowiedz);
         if(!sp.getBoolean("stanTrzeciejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(trzeciaOdpowiedz);
@@ -247,15 +244,14 @@ public class MainActivity extends AppCompatActivity {
         Button przyciskDoMenu = new Button(MainActivity.this);
         Button przyciskDoWznowieniaGry = new Button(MainActivity.this);
 
-        // Pole pauzy
+        // Generowanie pola pauzy
         poleWlasciwosci.addRule(RelativeLayout.CENTER_HORIZONTAL);
         poleWlasciwosci.addRule(RelativeLayout.CENTER_VERTICAL);
 
         polePauzy.setLayoutParams(poleWlasciwosci);
         polePauzy.setBackgroundColor(Color.BLACK);
         polePauzy.getBackground().setAlpha(127);
-
-        // Przycisk do wznowienia gry
+        // Generowanie przycisku do wznowienia gry
         przycisk1Wlasciwosci.addRule(RelativeLayout.CENTER_IN_PARENT);
         przycisk1Wlasciwosci.setMargins(80, 20, 80 ,20);
 
@@ -282,10 +278,10 @@ public class MainActivity extends AppCompatActivity {
         glownyLayout.addView(przyciskDoMenu);
         glownyLayout.addView(przyciskDoWznowieniaGry);
 
-        przelaczWidocznoscPrzyciskow();
+        przelaczWidocznoscPrzyciskow(); // Wyłączenie przycisków w momencie pauzy
 
         przyciskDoMenu.setOnClickListener(v -> {
-            przelaczWidocznoscPrzyciskow();
+            przelaczWidocznoscPrzyciskow(); // Włączenie przycisków zaraz przed wyjściem do menu
             zakonczGre();
         });
         przyciskDoWznowieniaGry.setOnClickListener(v -> {
