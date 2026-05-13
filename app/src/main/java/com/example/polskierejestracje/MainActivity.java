@@ -230,6 +230,10 @@ public class MainActivity extends AppCompatActivity {
         trzeciaOdpowiedz.setVisibility(View.GONE);
         czwartaOdpowiedz.setVisibility(View.GONE);
         pauza.setVisibility(View.GONE);
+
+        // Przesunięcie wyniku po końcu gry
+        Animation przesuniecie = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ruchwyniku);
+        wynik.startAnimation(przesuniecie);
     }
     @SuppressLint("ResourceType")
     public void wygenerujPolePauzy(){
