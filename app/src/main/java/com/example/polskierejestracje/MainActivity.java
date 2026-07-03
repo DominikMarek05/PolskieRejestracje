@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,10 +125,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ustawOdpowiedzi(){
-        ustawOdpowiedzWojewodztw(pierwszaOdpowiedz);
-        ustawOdpowiedzWojewodztw(drugaOdpowiedz);
-        ustawOdpowiedzWojewodztw(trzeciaOdpowiedz);
-        ustawOdpowiedzWojewodztw(czwartaOdpowiedz);
+        ustawOdpowiedzWojewodztw(kolekcjaPrzyciskow);
+
         wynik.setText("Wynik: " + wynikInt);
         kolekcjaPrzyciskow.get((int)(Math.random()*4)).setText(poprawnaRejestracja.getNazwa());
     }
@@ -136,23 +135,29 @@ public class MainActivity extends AppCompatActivity {
         rejestracja.setText(poprawnaRejestracja.getSkrot());
     }
 
-    public void ustawOdpowiedzWojewodztw(Button b){
+    public void ustawOdpowiedzWojewodztw(ArrayList<Button> b){
         HashSet<Rejestracja> pulaOdpowiedzi = new HashSet<>();
-            for(Rejestracja rej : wszystkiePowiaty){
-               if(konwerterZnakow(rej.getNazwa().charAt(0)) == poprawnaRejestracja.getSkrot().charAt(1) && !rej.getSkrot().equals(poprawnaRejestracja.getSkrot())) {
-                   if(!pierwszaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !drugaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !trzeciaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !czwartaOdpowiedz.getText().toString().equals(rej.getNazwa())) pulaOdpowiedzi.add(rej);
-               }
+        for(Rejestracja rej : wszystkiePowiaty){
+            if(konwerterZnakow(rej.getNazwa().charAt(0)) == poprawnaRejestracja.getSkrot().charAt(1) && !rej.getSkrot().equals(poprawnaRejestracja.getSkrot())) {
+                if(!pierwszaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !drugaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !trzeciaOdpowiedz.getText().toString().equals(rej.getNazwa()) && !czwartaOdpowiedz.getText().toString().equals(rej.getNazwa())) pulaOdpowiedzi.add(rej);
             }
-            if(pulaOdpowiedzi.size()>=4) {
+        }
+        if(pulaOdpowiedzi.size()>=4) { // Jeżeli możliwych odpowiedzi jest więcej niż 3, ustaw je na przyciskach
+            for(int i = 0; i < 4; i++){
                 int losowaWartosc = (int) (Math.random() * pulaOdpowiedzi.size());
-                int i = 0;
+                int j = 0;
                 for (Rejestracja el : pulaOdpowiedzi) {
-                    if (i == losowaWartosc) b.setText(el.getNazwa());
-                    i++;
+                    if (j == losowaWartosc){
+                        b.get(i).setText(el.getNazwa());
+                    }
+                    j++;
                 }
-            }else{
-                b.setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
             }
+        }else{
+            for(int i = 0; i < 4; i++){
+                b.get(i).setText(wszystkiePowiaty.get((int)(Math.random()*wszystkiePowiaty.size())).getNazwa());
+            }
+        }
     }
     public void obsluzPrzycisk(Button przycisk){
         if (przycisk.getText().equals(poprawnaRejestracja.getNazwa())){
@@ -184,10 +189,12 @@ public class MainActivity extends AppCompatActivity {
     public void wylaczKonkretnyPrzycisk(Button przycisk){
         przycisk.setClickable(false);
         przycisk.setAlpha(0.5f);
+        przycisk.setBackgroundResource(R.drawable.buttonwrong);
     }
     public void wlaczKonkretnyPrzycisk(Button przycisk){
         przycisk.setClickable(true);
         przycisk.setAlpha(1.0f);
+        przycisk.setBackgroundResource(R.drawable.button);
     }
     public void zapiszPrzyPauzie(){
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -309,11 +316,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void przelaczWidocznoscPrzyciskow(){
         przelacznik=!przelacznik;
-        pauza.setActivated(przelacznik);
-        pierwszaOdpowiedz.setActivated(przelacznik);
-        drugaOdpowiedz.setActivated(przelacznik);
-        trzeciaOdpowiedz.setActivated(przelacznik);
-        czwartaOdpowiedz.setActivated(przelacznik);
+        pauza.setEnabled(przelacznik);
+        pierwszaOdpowiedz.setEnabled(przelacznik);
+        drugaOdpowiedz.setEnabled(przelacznik);
+        trzeciaOdpowiedz.setEnabled(przelacznik);
+        czwartaOdpowiedz.setEnabled(przelacznik);
     }
     public void zakonczGre() {
         przelaczWidocznoscPrzyciskow();
