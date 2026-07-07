@@ -22,23 +22,39 @@
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
     android:layout_alignParentBottom="true"
-    android:layout_marginBottom="170dp"
+    android:layout_marginBottom="310dp"
     android:text="GRAJ"
     android:textSize="40sp"
     android:padding="20dp"
     android:textColor="@color/black"
-    android:background="@drawable/button"/>
+    android:background="@drawable/button"
+    android:fontFamily="@font/din1451alt"/>
 
-    <Button
-        android:id="@+id/wyjdz"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:text="WYJDŹ"
-        android:textSize="40sp"
-        android:padding="20dp"
-        android:textColor="@color/black"
-        android:background="@drawable/button"/>
+<Button
+    android:id="@+id/tabelaPrzycisk"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="165dp"
+    android:text="TABELA\nWYNIKÓW"
+    android:textSize="40sp"
+    android:padding="10dp"
+    android:textColor="@color/black"
+    android:background="@drawable/button"
+    android:fontFamily="@font/din1451alt"/>
+
+<Button
+    android:id="@+id/wyjdz"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="50dp"
+    android:text="WYJDŹ"
+    android:textSize="40sp"
+    android:padding="20dp"
+    android:textColor="@color/black"
+    android:background="@drawable/button"
+    android:fontFamily="@font/din1451alt"/>
 </RelativeLayout>

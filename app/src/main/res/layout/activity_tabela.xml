@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tabelaLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TabelaActivity"
+    android:background="@color/white">
+    <TextView
+        android:id="@+id/tabelaTekst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TABELA WYNIKÓW"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"
+        android:fontFamily="@font/din1451alt"
+        android:layout_marginTop="50dp"/>
+
+    <Button
+        android:id="@+id/powrotZTabeli"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="&#8617;"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/black"
+        android:background="@android:color/transparent"
+        />
+
+    <ListView
+        android:id="@+id/listaWynikow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tabelaTekst"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

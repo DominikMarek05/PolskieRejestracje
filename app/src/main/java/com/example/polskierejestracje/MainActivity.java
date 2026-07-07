@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.polskierejestracje.Classes.ImplementArray;
 import com.example.polskierejestracje.Classes.Rejestracja;
+import com.example.polskierejestracje.Classes.Wynik;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     Rejestracja poprawnaRejestracja = new Rejestracja();
     SharedPreferences sp;
     Boolean przelacznik = true;
+    ArrayList<Wynik> tablicaWynikow = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,20 @@ public class MainActivity extends AppCompatActivity {
         kolekcjaPrzyciskow.add(trzeciaOdpowiedz);
         kolekcjaPrzyciskow.add(czwartaOdpowiedz);
 
+        Wynik startowyWynik = new Wynik(0, LocalDate.now().toString());
+        tablicaWynikow.add(startowyWynik);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // Wyłączanie wygaszania w momencie gry
 
         // Wczytaj wartości z SharedPreferences
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         bledneOdpowiedzi = sp.getInt("bledneOdpowiedzi", 0);
         wynikInt = sp.getInt("wynik", 0);
+        Gson gson = new Gson();
+        String json = sp.getString("wyniki", "");
+        Type typ = new TypeToken<ArrayList<Wynik>>() {}.getType();
+        tablicaWynikow = gson.fromJson(json, typ);
+
         ImplementArray.stworzWszystkieWojewodztwa(wszystkiePowiaty); // Stworzenie puli rejestracji
 
         // Wczytaj wartości po powrocie
@@ -146,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
             for(int i = 0; i < 4; i++){
                 int losowaWartosc = (int) (Math.random() * pulaOdpowiedzi.size());
                 int j = 0;
-                for (Rejestracja el : pulaOdpowiedzi) {
+                for (Rejestracja el : pulaOdpowiedzi) { // Przejście po każdej wartości seta
                     if (j == losowaWartosc){
                         b.get(i).setText(el.getNazwa());
                     }
@@ -178,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
                 wlaczKonkretnyPrzycisk(czwartaOdpowiedz);
             }
         }else{
-            animacjaSerc(++bledneOdpowiedzi); // Inkrementacja błędnej odpowiedzi i nadanie animacji sercu
-            ustawSerce(bledneOdpowiedzi); // Wczytanie odpowiedniej grafiki serduszka
-            wylaczKonkretnyPrzycisk(przycisk); // Odrzucenie przycisku w którym już wiemy, że jest błędna odpowiedź
+            animacjaSerc(++bledneOdpowiedzi);   // Inkrementacja błędnej odpowiedzi i nadanie animacji sercu
+            ustawSerce(bledneOdpowiedzi);       // Wczytanie odpowiedniej grafiki serduszka
+            wylaczKonkretnyPrzycisk(przycisk);  // Odrzucenie przycisku w którym już wiemy, że jest błędna odpowiedź
             if(bledneOdpowiedzi==3){
                 wyswietlKoniecGry();
             }
@@ -209,11 +222,14 @@ public class MainActivity extends AppCompatActivity {
         edytor.putString("skrot", poprawnaRejestracja.getSkrot());
         edytor.putString("poprawnaOdpowiedz", poprawnaRejestracja.getNazwa());
 
-        edytor.putBoolean("stanPierwszejOdpowiedzi", pierwszaOdpowiedz.isClickable());
-        edytor.putBoolean("stanDrugiejOdpowiedzi", drugaOdpowiedz.isClickable());
-        edytor.putBoolean("stanTrzeciejOdpowiedzi", trzeciaOdpowiedz.isClickable());
-        edytor.putBoolean("stanCzwartejOdpowiedzi", czwartaOdpowiedz.isClickable());
+        edytor.putBoolean("stanPierwszejOdpowiedzi", pierwszaOdpowiedz.isClickable());  // Zapisanie w jakim stanie były przyciski
+        edytor.putBoolean("stanDrugiejOdpowiedzi", drugaOdpowiedz.isClickable());       //
+        edytor.putBoolean("stanTrzeciejOdpowiedzi", trzeciaOdpowiedz.isClickable());    //
+        edytor.putBoolean("stanCzwartejOdpowiedzi", czwartaOdpowiedz.isClickable());    //
         edytor.apply();
+
+        rejestracja.setText("---");
+
         wygenerujPolePauzy();
     }
     public void wczytajPoPauzie(){
@@ -230,16 +246,20 @@ public class MainActivity extends AppCompatActivity {
         poprawnaRejestracja.setNazwa(sp.getString("poprawnaOdpowiedz", ""));
         poprawnaRejestracja.setSkrot(sp.getString("skrot",""));
 
-        // Wczytanie niepoprawnych odpowiedzi po powrocie z menu
-        if(!sp.getBoolean("stanPierwszejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(pierwszaOdpowiedz);
-        if(!sp.getBoolean("stanDrugiejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(drugaOdpowiedz);
-        if(!sp.getBoolean("stanTrzeciejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(trzeciaOdpowiedz);
-        if(!sp.getBoolean("stanCzwartejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(czwartaOdpowiedz);
+        if(!sp.getBoolean("stanPierwszejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(pierwszaOdpowiedz); // Wczytanie niepoprawnych odpowiedzi po powrocie z menu
+        if(!sp.getBoolean("stanDrugiejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(drugaOdpowiedz);      //
+        if(!sp.getBoolean("stanTrzeciejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(trzeciaOdpowiedz);   //
+        if(!sp.getBoolean("stanCzwartejOdpowiedzi", true)) wylaczKonkretnyPrzycisk(czwartaOdpowiedz);   //
     }
     public void wyswietlKoniecGry(){
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         sp = getApplicationContext().getSharedPreferences("MojeDane", MODE_PRIVATE);
         SharedPreferences.Editor edytor = sp.edit();
+        Gson gson = new Gson();
+        if(tablicaWynikow==null) tablicaWynikow = new ArrayList<>();
+        tablicaWynikow.add(new Wynik(wynikInt, LocalDate.now().toString()));
+        String json = gson.toJson(tablicaWynikow);
+        edytor.putString("wyniki", json);
         edytor.putInt("wynik", 0);
         edytor.putInt("bledneOdpowiedzi", 0);
         edytor.apply();
@@ -311,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
             glownyLayout.removeView(przyciskDoMenu);
             glownyLayout.removeView(przyciskDoWznowieniaGry);
 
+            rejestracja.setText(poprawnaRejestracja.getSkrot());
             przelaczWidocznoscPrzyciskow();
         });
     }
